@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.favorite_list.mapper.UserVideoMapper">
+
+   <resultMap type="com.example.favorite_list.entity.UserVideo" id="uavMap">
+       <result property="id" column="id" jdbcType="INTEGER"/>
+       <result property="userId" column="user_id" jdbcType="INTEGER"/>
+       <result property="videoId" column="video_id" jdbcType="INTEGER"/>
+   </resultMap>
+    <resultMap type="com.example.favorite_list.entity.Video" id="videoMap">
+        <result property="videoId" column="video_id" jdbcType="INTEGER"/>
+        <result property="videoName" column="video_name" jdbcType="VARCHAR"/>
+        <result property="upName" column="up_name" jdbcType="VARCHAR"/>
+    </resultMap>
+<!--查条数-->
+    <select id="chatiaoshu" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM user_video WHERE user_id=#{userId} and video_id=#{videoId};
+    </select>
+<!--删除-->
+    <delete id="del">
+      DELETE FROM user_video where user_id=#{userId} and video_id=#{videoId} ;
+    </delete>
+    <insert id="xinzeng">
+        INSERT INTO user_video(user_id,video_id) VALUES(#{userId},#{videoId});
+    </insert>
+    <select id="my_favorite" resultMap="videoMap">
+
+        select * from video where video_id in(select video_id from user_video where user_id=#{userId});
+    </select>
+    <select id="my_favoriteByName" resultMap="videoMap">
+        select * from video where video_id in(select video_id from user_video where user_id=#{userId}) and video_name like  "%"#{videoName}"%";
+
+    </select>
+    <select id="youdeshuzu" resultType="java.lang.Integer">
+        SELECT video_id FROM user_video WHERE user_id=#{userId} ;
+    </select>
+    <insert id="insert" useGeneratedKeys="true">
+        INSERT INTO user_video(user_id,video_id) VALUES
+        <foreach collection="a" item="model"
+                 separator=",">
+        (
+        #{userId},#{model}
+        )
+    </foreach>
+
+    </insert>
+</mapper>
+

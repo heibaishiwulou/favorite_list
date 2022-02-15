@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <title>Title</title>
+</head>
+<body>
+userid<input  type="text" id="user_id">
+video_id<input  type="text" id="video_id">
+<button id="shoucang" onclick="shoucang()">收藏</button>
+<h1>-------------------------------------</h1>
+userid<input type="text" id="user_favorite">
+<button  onclick="my_favorite()">我的收藏</button>
+<h1>-------------------------------------</h1>
+userid<input type="text" id="my_favoriteByName_id">
+videoName<input type="text" id="my_favoriteByName_name">
+<button  onclick="my_favoriteByName()">搜索收藏</button>
+<h1>-------------------------------------</h1>
+userid<input type="text" id="del_p_id">
+<button  onclick="del_p()">批量收藏</button>
+<script>
+    function del_p(){
+        let userId=$('#del_p_id').val();
+        alert(userId)
+        var array = new Array();
+        array.push(1);
+        array.push(2);
+        array.push(4);
+        console.log(array)
+        $.ajax({
+            type: 'POST',
+            traditional: true,
+            url: "http://localhost:8080/soucang_p",
+            data:{array:array,
+                  userId:userId
+            },
+            success: function (data) {
+                alert("新增成功")
+            },
+            dataType: "JSON"
+        });
+    }
+    function my_favorite() {
+     let userId=$('#user_favorite').val();
+        let postdata={
+            userId:userId,
+        }
+     alert(userId)
+        $.ajax({
+            type: 'POST',
+            url: "http://localhost:8080/my_favorite",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(postdata),
+            success: function (data) {
+                console.log(data)
+            },
+            dataType: "JSON"
+        });
+    }
+    function my_favoriteByName(){
+        let userId=$('#my_favoriteByName_id').val();
+        let videoName=$('#my_favoriteByName_name').val();
+        let postdata={
+            userId:userId,
+            videoName:videoName,
+        }
+        alert(userId+""+videoName)
+        $.ajax({
+            type: 'POST',
+            url: "http://localhost:8080/my_favoriteByName",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(postdata),
+            success: function (data) {
+                console.log(data)
+            },
+            dataType: "JSON"
+        });
+    }
+
+    function shoucang(){
+        let  userid = $('#user_id').val();
+        let  videoid = $('#video_id').val();
+
+        let postdata={
+            userId:userid,
+            videoId:videoid,
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: "http://localhost:8080/shoucang",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(postdata),
+            success: function (data) {
+                    alert("更新成功")
+                },
+            dataType: "JSON"
+            });
+    }
+</script>
+</body>
+</html>
